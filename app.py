@@ -30,7 +30,25 @@ class Reading(db.Model):
 
 @app.route('/')
 def index():
-    return render_template('index.html', bme280_text=bme280_text())
+    timestamp_labels = []
+    tempf = []
+    humidity = []
+    pressure = []
+    try:
+        readings = db.session.query(Reading).limit(288).all()
+        for reading in readings:
+            unixtime = reading.created_date
+            time_label = time.strftime('%H:%M:%S', time.localtime(float(unixtime)))
+            timestamp_labels.append(time_label)
+            tempf.append(round(float(reading.ftemp),1))
+            humidity.append(round(float(reading.humidity),2))
+            inpressure = round((float(reading.pressure) * 0.029529983071445),2) # mbar to inHg
+            pressure.append(inpressure)
+        return render_template('index.html', bme280_text=bme280_text(), timestamp_labels=timestamp_labels, temps=tempf, humids=humidity, press=pressure)
+    except Exception as e:
+        error_text = "<p>" + str(e) + "</p>"
+        hed = "<h1>Error retrieving sensor data</h1>"
+        return hed + error_text
 
 @app.route('/chart_test')
 def chart_test():

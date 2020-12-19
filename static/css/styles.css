@@ -1,10 +1,11 @@
 body {
-    width: 30em;
-    margin: auto; 
+    margin: 25; 
     font-family: trebuchet ms, helvetica, sans-serif;
 }
 div {
     margin-left: 1rem;
     margin-right: 3px;
 }
-
+canvas {
+    margin: 0 !important;
+}
