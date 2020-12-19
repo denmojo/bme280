@@ -1,0 +1,10 @@
+body {
+    width: 30em;
+    margin: auto; 
+    font-family: trebuchet ms, helvetica, sans-serif;
+}
+div {
+    margin-left: 1rem;
+    margin-right: 3px;
+}
+
