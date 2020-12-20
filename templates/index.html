@@ -1,12 +1,33 @@
 <html>
 <head>
 <meta charset="utf-8" name="viewport" content="width=device-width" />
+<script type="text/javascript">
+function display_c(){
+	var refresh=1000; // Refresh rate in milli seconds
+	mytime=setTimeout('display_ct()',refresh)
+}
+
+function display_ct() {
+	var x = moment().format('dddd, MMMM Do YYYY, hh:mm:ss a'); 
+	var y = moment().utc().format('dddd, MMMM Do YYYY, hh:mm:ss a');
+	document.getElementById('ct').innerHTML = x;
+	document.getElementById('ut').innerHTML = y;
+
+	display_c();
+
+}
+</script>
+<script src="{{ url_for('static', filename='moment.js') }}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" type="text/css" charset="utf-8" />
 <script src="{{ url_for('static', filename='Chart.min.js') }}"></script>
-<body>
+</head>
+<body onload=display_ct();>
 <h1>Welcome - ad6dm-pi3b-1 server</h1>
 <p>Current location environment stats:</p>
 <pre>{{bme280_text}}</pre>
+<p><strong>Local Time:</strong> <span id='ct'> </span><br/>
+<strong>UTC Time:</strong>&nbsp;&nbsp; <span id='ut'> </span></p>
+
 <p>Readings for the past day</p>
 <div width="1000" height="400">
 <canvas id="myChart" width="1000" height="600"></canvas>
