@@ -38,8 +38,8 @@ def index():
     humidity = []
     pressure = []
     try:
-        readings = db.session.query(Reading).limit(288).all()
-        for reading in readings:
+        readings = db.session.query(Reading).order_by(Reading.id.desc()).limit(288).all()
+        for reading in reversed(readings):
             unixtime = reading.created_date
             time_label = time.strftime('%H:%M:%S', time.localtime(float(unixtime)))
             timestamp_labels.append(time_label)
@@ -60,8 +60,8 @@ def chart_test():
     humidity = []
     pressure = []
     try:
-        readings = db.session.query(Reading).limit(288).all()
-        for reading in readings:
+        readings = db.session.query(Reading).order_by(Reading.id.desc()).limit(288).all()
+        for reading in reversed(readings):
             unixtime = reading.created_date
             time_label = time.strftime('%H:%M:%S', time.localtime(float(unixtime)))
             timestamp_labels.append(time_label)
