@@ -6,8 +6,11 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 
 def bme280_text():
-    stdout = check_output(['./read_stats.sh']).decode('utf-8')
-    return stdout
+    try:
+        stdout = check_output(['./read_stats.sh']).decode('utf-8')
+        return stdout
+    except Exception as e:
+        return "<h1>Problem reading sensor</h1><p>please check system.<br>Error: " + str(e) + "</p>"
 
 app = Flask(__name__)
 
@@ -47,7 +50,7 @@ def index():
         return render_template('index.html', bme280_text=bme280_text(), timestamp_labels=timestamp_labels, temps=tempf, humids=humidity, press=pressure)
     except Exception as e:
         error_text = "<p>" + str(e) + "</p>"
-        hed = "<h1>Error retrieving sensor data</h1>"
+        hed = "<h1>Error retrieving historical sensor data from database</h1>"
         return hed + error_text
 
 @app.route('/chart_test')
