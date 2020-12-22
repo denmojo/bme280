@@ -37,10 +37,10 @@ def index():
     tempf = []
     humidity = []
     pressure = []
+    last_loaded = time.strftime('%b %d %Y %H:%M:%S', time.localtime(time.time()))
     try:
         readings = db.session.query(Reading).order_by(Reading.id.desc()).limit(288).all()
         for reading in reversed(readings):
-            last_loaded = time.strftime('%b %d %Y %H:%M:%S', time.localtime(time.time()))
             unixtime = reading.created_date
             time_label = time.strftime('%H:%M:%S', time.localtime(float(unixtime)))
             timestamp_labels.append(time_label)
