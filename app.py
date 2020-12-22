@@ -40,6 +40,7 @@ def index():
     try:
         readings = db.session.query(Reading).order_by(Reading.id.desc()).limit(288).all()
         for reading in reversed(readings):
+            last_loaded = time.strftime('%b %d %Y %H:%M:%S', time.localtime(time.time()))
             unixtime = reading.created_date
             time_label = time.strftime('%H:%M:%S', time.localtime(float(unixtime)))
             timestamp_labels.append(time_label)
@@ -47,7 +48,7 @@ def index():
             humidity.append(round(float(reading.humidity),2))
             inpressure = round((float(reading.pressure) * 0.029529983071445),2) # mbar to inHg
             pressure.append(inpressure)
-        return render_template('index.html', bme280_text=bme280_text(), timestamp_labels=timestamp_labels, temps=tempf, humids=humidity, press=pressure)
+        return render_template('index.html', last_loaded = last_loaded, bme280_text=bme280_text(), timestamp_labels=timestamp_labels, temps=tempf, humids=humidity, press=pressure)
     except Exception as e:
         error_text = "<p>" + str(e) + "</p>"
         hed = "<h1>Error retrieving historical sensor data from database</h1>"
