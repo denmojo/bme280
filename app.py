@@ -1,5 +1,6 @@
 import subprocess
 import time
+import platform
 from subprocess import check_output
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
@@ -21,6 +22,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db = SQLAlchemy(app)
+
+hostname = platform.node()
 
 class Reading(db.Model):
     __tablename__ = "sensor_readings"
@@ -48,7 +51,7 @@ def index():
             humidity.append(round(float(reading.humidity),2))
             inpressure = round((float(reading.pressure) * 0.029529983071445),2) # mbar to inHg
             pressure.append(inpressure)
-        return render_template('index.html', last_loaded = last_loaded, bme280_text=bme280_text(), timestamp_labels=timestamp_labels, temps=tempf, humids=humidity, press=pressure)
+        return render_template('index.html', hostname = hostname, last_loaded = last_loaded, bme280_text=bme280_text(), timestamp_labels=timestamp_labels, temps=tempf, humids=humidity, press=pressure)
     except Exception as e:
         error_text = "<p>" + str(e) + "</p>"
         hed = "<h1>Error retrieving historical sensor data from database</h1>"
