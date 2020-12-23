@@ -1,6 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8" name="viewport" content="width=device-width" />
+<title>EnvSensor - {{hostname}}</title>
 <script type="text/javascript">
 function display_c(){
 	var refresh=1000; // Refresh rate in milli seconds
@@ -8,27 +9,29 @@ function display_c(){
 }
 
 function display_ct() {
-	var x = moment().format('dddd, MMMM Do YYYY, hh:mm:ss a'); 
-	var y = moment().utc().format('dddd, MMMM Do YYYY, hh:mm:ss a');
-	document.getElementById('ct').innerHTML = x;
-	document.getElementById('ut').innerHTML = y;
+//	var x = moment().format('dddd, MMMM Do YYYY, hh:mm:ss a'); 
+	var locTime = moment().tz("America/Los Angeles").format('dddd, MMMM Do YYYY, hh:mm:ss a');
+	var utc = moment().utc().format('dddd, MMMM Do YYYY, hh:mm:ss a');
+	document.getElementById('ct').innerHTML = locTime;
+	document.getElementById('ut').innerHTML = utc;
 
 	display_c();
 
 }
 </script>
 <script src="{{ url_for('static', filename='moment.js') }}"></script>
+<script src="{{ url_for('static', filename='moment-timezone.js') }}"></script>
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" type="text/css" charset="utf-8" />
 <script src="{{ url_for('static', filename='Chart.min.js') }}"></script>
 </head>
 <body onload=display_ct();>
-<h1>Welcome - ad6dm-pi3b-1 server</h1>
+<h1>Welcome - {{hostname}}</h1>
 <p>Current location environment stats (loaded: {{last_loaded}} Pacific Time): </p>
 <pre>{{bme280_text}}</pre>
 <button onClick="window.location.reload();">Refresh page</button>
-<p><strong>Local Time:</strong> <span id='ct'> </span><br/>
-<strong>UTC Time:</strong>&nbsp;&nbsp; <span id='ut'> </span></p>
+<p><strong>Pacific Time:</strong> <span id='ct'> </span><br/>
+<strong>UTC Time:</strong>&nbsp;&nbsp;&nbsp;&nbsp; <span id='ut'> </span></p>
 
 <p>Readings for the past day</p>
 <div width="1000" height="400">
